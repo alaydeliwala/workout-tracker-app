@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model WorkoutDay {
+  id        String     @id // "upper" | "lower" | "warmup" | "reset"
+  name      String
+  exercises Exercise[]
+  sessions  Session[]
+}
+
+model Exercise {
+  id            String     @id @default(cuid())
+  workoutDayId  String
+  workoutDay    WorkoutDay @relation(fields: [workoutDayId], references: [id])
+  orderIndex    Int
+  primaryName   String
+  alternateName String?
+  sets          Int
+  repsMin       Int
+  repsMax       Int
+  restSeconds   Int
+  notes         String?
+  incrementLbs  Float      @default(2.5)
+
+  setLogs SetLog[]
+  records PersonalRecord[]
+}
+
+model Session {
+  id           String     @id @default(cuid())
+  workoutDayId String
+  workoutDay   WorkoutDay @relation(fields: [workoutDayId], references: [id])
+  startedAt    DateTime   @default(now())
+  completedAt  DateTime?
+  setLogs      SetLog[]
+}
+
+model SetLog {
+  id            String   @id @default(cuid())
+  sessionId     String
+  session       Session  @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  exerciseId    String
+  exercise      Exercise @relation(fields: [exerciseId], references: [id])
+  setNumber     Int
+  reps          Int
+  weightLbs     Float
+  usedAlternate Boolean  @default(false)
+  loggedAt      DateTime @default(now())
+
+  @@index([exerciseId])
+  @@index([sessionId])
+}
+
+model PersonalRecord {
+  id         String   @id @default(cuid())
+  exerciseId String   @unique
+  exercise   Exercise @relation(fields: [exerciseId], references: [id])
+  weightLbs  Float
+  reps       Int
+  achievedAt DateTime
+}

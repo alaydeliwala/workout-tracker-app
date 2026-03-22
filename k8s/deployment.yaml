@@ -1,0 +1,70 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workout-tracker-app
+  namespace: default
+  labels:
+    app: workout-tracker-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workout-tracker-app
+  template:
+    metadata:
+      labels:
+        app: workout-tracker-app
+    spec:
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+      volumes:
+        - name: workout-db
+          persistentVolumeClaim:
+            claimName: workout-db-pvc
+      containers:
+        - name: workout-tracker-app
+          image: ghcr.io/alaydeliwala/workout-tracker-app:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: DATABASE_URL
+              value: "file:/data/workout.db"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "100m"
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+          volumeMounts:
+            - name: workout-db
+              mountPath: /data
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: workout-tracker-app
+  namespace: default
+spec:
+  selector:
+    app: workout-tracker-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+  type: ClusterIP

@@ -1,0 +1,86 @@
+export const upperDayExercises = [
+  {
+    orderIndex: 1,
+    primaryName: "Barbell Bench Press",
+    alternateName: "Dumbbell Flat Bench Press",
+    sets: 4,
+    repsMin: 6,
+    repsMax: 8,
+    restSeconds: 120,
+    incrementLbs: 2.5,
+    notes:
+      "Grip slightly wider than shoulder width. Feet flat on floor. Touch bar to mid-chest, don't bounce. Dumbbells: lower until elbows at 90 degrees.",
+  },
+  {
+    orderIndex: 2,
+    primaryName: "Bent-Over Barbell Row",
+    alternateName: "Single-Arm Dumbbell Row",
+    sets: 4,
+    repsMin: 6,
+    repsMax: 8,
+    restSeconds: 120,
+    incrementLbs: 2.5,
+    notes:
+      "Hinge at hips ~45 degrees, slight knee bend. Pull bar to lower chest, not belly button. Single-arm: knee and hand on bench, pull dumbbell to hip.",
+  },
+  {
+    orderIndex: 3,
+    primaryName: "Lat Pulldown",
+    alternateName: "Dumbbell Pullover",
+    sets: 3,
+    repsMin: 8,
+    repsMax: 10,
+    restSeconds: 90,
+    incrementLbs: 2.5,
+    notes:
+      "Lean back slightly, pull bar to upper chest, squeeze shoulder blades. Never pull behind neck. Pullover: lie flat, slight elbow bend, lower behind head, pull back over chest.",
+  },
+  {
+    orderIndex: 4,
+    primaryName: "Dumbbell Overhead Press",
+    alternateName: "Seated or Standing variation",
+    sets: 3,
+    repsMin: 8,
+    repsMax: 10,
+    restSeconds: 90,
+    incrementLbs: 2.5,
+    notes:
+      "Start at ear height, palms forward. Press straight up. Seated is easier on lower back. Stop if shoulders feel off — most likely exercise to cause shoulder issues.",
+  },
+  {
+    orderIndex: 5,
+    primaryName: "Cable Face Pulls",
+    alternateName: "Dumbbell Reverse Flyes",
+    sets: 3,
+    repsMin: 12,
+    repsMax: 15,
+    restSeconds: 60,
+    incrementLbs: 2.5,
+    notes:
+      "Cable at face height, rope attachment, pull toward forehead with elbows high. Think 'pull apart.' Reverse flyes: bend over or chest-supported on incline bench, raise dumbbells to sides.",
+  },
+  {
+    orderIndex: 6,
+    primaryName: "Dumbbell Bicep Curls",
+    alternateName: null,
+    sets: 2,
+    repsMin: 10,
+    repsMax: 12,
+    restSeconds: 60,
+    incrementLbs: 2.5,
+    notes:
+      "Standing, elbows pinned to sides. If you're swinging, the weight is too heavy. Alternate or both at once.",
+  },
+  {
+    orderIndex: 7,
+    primaryName: "Tricep Rope Pushdowns",
+    alternateName: "DB Overhead Tricep Extension",
+    sets: 2,
+    repsMin: 12,
+    repsMax: 15,
+    restSeconds: 60,
+    incrementLbs: 2.5,
+    notes:
+      "Pushdowns: elbows tight to body, spread rope at bottom. Extensions: both hands on one DB behind head, elbows to ceiling, extend up.",
+  },
+];

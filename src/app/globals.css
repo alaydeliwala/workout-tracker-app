@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  --bg:      #16181A;
+  --white:   #EBF0F4;
+  --surface: rgba(235, 240, 244, 0.05);
+  --border:  rgba(235, 240, 244, 0.09);
+
+  /* UNIVERSE palette */
+  --u: #F79432;
+  --n: #F37055;
+  --i: #EF4D7B;
+  --v: #A166AB;
+  --e1: #4F73B8;
+  --r: #1D99AE;
+  --s: #0CB49B;
+  --e2: #6CBC82;
+}
+
+body {
+  background: var(--bg);
+  color: var(--white);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}
