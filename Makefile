@@ -1,4 +1,4 @@
-.PHONY: dev build seed migrate studio reset init k8s-pvc deploy
+.PHONY: dev build seed migrate studio reset init k8s-pv k8s-pvc deploy
 
 init:
 	npm install
@@ -34,9 +34,13 @@ reset:
 	npx prisma migrate deploy
 	npx prisma db seed
 
-k8s-pvc:
+k8s-pv:
+	kubectl apply -f k8s/pv.yaml
+
+k8s-pvc: k8s-pv
 	kubectl apply -f k8s/pvc.yaml
 
-deploy:
+deploy: k8s-pv
 	kubectl apply -f k8s/pvc.yaml
+	kubectl apply -f k8s/backup-cronjob.yaml
 	kubectl rollout restart deployment/workout-tracker-app

@@ -1,0 +1,36 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: workout-db-backup
+  namespace: default
+spec:
+  schedule: "0 */4 * * *"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: alpine:3.19
+              command:
+                - /bin/sh
+                - -c
+                - |
+                  mkdir -p /data/backups
+                  CURRENT=$(md5sum /data/workout.db | cut -d' ' -f1)
+                  LATEST=$(ls -t /data/backups/workout-*.db 2>/dev/null | head -1)
+                  if [ -n "$LATEST" ] && [ "$(md5sum "$LATEST" | cut -d' ' -f1)" = "$CURRENT" ]; then
+                    echo "No changes since last backup, skipping."
+                    exit 0
+                  fi
+                  cp /data/workout.db /data/backups/workout-$(TZ=America/New_York date +%Y-%m-%d_%I-%M%p).db
+                  ls -t /data/backups/workout-*.db | tail -n +25 | xargs -r rm --
+              volumeMounts:
+                - name: db-storage
+                  mountPath: /data
+          volumes:
+            - name: db-storage
+              persistentVolumeClaim:
+                claimName: workout-db-pvc

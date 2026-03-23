@@ -26,6 +26,37 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
 export async function DELETE(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
+  // Capture affected exercises before cascade removes the logs
+  const affectedLogs = await prisma.setLog.findMany({
+    where: { sessionId: id },
+    select: { exerciseId: true },
+  });
+  const exerciseIds = [...new Set(affectedLogs.map((l) => l.exerciseId))];
+
+  // Delete session — SetLogs cascade away
   await prisma.session.delete({ where: { id } });
+
+  // Recompute PR for each affected exercise from remaining logs
+  for (const exerciseId of exerciseIds) {
+    const remainingLogs = await prisma.setLog.findMany({
+      where: { exerciseId },
+      select: { weightLbs: true, reps: true, loggedAt: true },
+    });
+
+    if (remainingLogs.length === 0) {
+      await prisma.personalRecord.deleteMany({ where: { exerciseId } });
+    } else {
+      const best = remainingLogs.reduce((a, b) =>
+        a.weightLbs * (1 + a.reps / 30) >= b.weightLbs * (1 + b.reps / 30) ? a : b
+      );
+      await prisma.personalRecord.upsert({
+        where: { exerciseId },
+        update: { weightLbs: best.weightLbs, reps: best.reps, achievedAt: best.loggedAt },
+        create: { exerciseId, weightLbs: best.weightLbs, reps: best.reps, achievedAt: best.loggedAt },
+      });
+    }
+  }
+
   return new NextResponse(null, { status: 204 });
 }

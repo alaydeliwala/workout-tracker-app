@@ -4,6 +4,8 @@ metadata:
   name: workout-db-pvc
   namespace: default
 spec:
+  storageClassName: ""
+  volumeName: workout-db-pv
   accessModes:
     - ReadWriteOnce
   resources:
