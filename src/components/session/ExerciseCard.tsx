@@ -13,11 +13,12 @@ type Props = {
 
 export function ExerciseCard({ exercise, sessionId, nextExerciseName }: Props) {
   const [useAlternate, setUseAlternate] = useState(false);
+  const [extraSets, setExtraSets] = useState(0);
   const { loggedSets, logSet } = useSessionStore();
   const { startTimer } = useTimerStore();
 
   const completedSets = loggedSets.filter((s) => s.exerciseId === exercise.id).length;
-  const defaultWeight = exercise.suggestedWeight ?? exercise.lastWeight ?? 0;
+  const defaultWeight = exercise.lastWeight ?? exercise.suggestedWeight ?? 0;
   const restLabel = exercise.restSeconds >= 60 ? `${exercise.restSeconds / 60}m` : `${exercise.restSeconds}s`;
 
   const handleLog = async (weightLbs: number, reps: number) => {
@@ -113,7 +114,7 @@ export function ExerciseCard({ exercise, sessionId, nextExerciseName }: Props) {
           </tr>
         </thead>
         <tbody>
-          {Array.from({ length: exercise.sets }, (_, i) => (
+          {Array.from({ length: exercise.sets + extraSets }, (_, i) => (
             <SetInputRow
               key={i}
               setNumber={i + 1}
@@ -126,6 +127,14 @@ export function ExerciseCard({ exercise, sessionId, nextExerciseName }: Props) {
           ))}
         </tbody>
       </table>
+
+      <button
+        onClick={() => setExtraSets((n) => n + 1)}
+        className="mt-2 w-full rounded-xl py-2 text-sm font-semibold"
+        style={{ background: "rgba(235,240,244,0.04)", border: "1px solid rgba(235,240,244,0.08)", color: "rgba(235,240,244,0.35)" }}
+      >
+        + Add set
+      </button>
     </div>
   );
 }

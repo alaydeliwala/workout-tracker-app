@@ -8,25 +8,25 @@ export function RestTimer() {
     useTimerStore();
 
   useEffect(() => {
-    if (!isActive) return;
+    if (!isActive || isPaused) return;
     const interval = setInterval(() => tick(), 1000);
     return () => clearInterval(interval);
-  }, [isActive, tick]);
+  }, [isActive, isPaused, tick]);
 
   if (!isActive) return null;
 
   const pct = totalSeconds > 0 ? remaining / totalSeconds : 0;
-  const circumference = 2 * Math.PI * 54;
+  const circumference = 2 * Math.PI * 88;
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-zinc-950/95 backdrop-blur-sm">
       <p className="mb-6 text-sm font-medium uppercase tracking-widest text-zinc-400">Rest</p>
 
       <div className="relative flex items-center justify-center">
-        <svg width="140" height="140" className="-rotate-90">
-          <circle cx="70" cy="70" r="54" fill="none" stroke="#27272a" strokeWidth="8" />
+        <svg width="220" height="220" className="-rotate-90">
+          <circle cx="110" cy="110" r="88" fill="none" stroke="#27272a" strokeWidth="10" />
           <circle
-            cx="70" cy="70" r="54" fill="none" stroke="#3b82f6" strokeWidth="8"
+            cx="110" cy="110" r="88" fill="none" stroke="#3b82f6" strokeWidth="10"
             strokeLinecap="round" strokeDasharray={circumference}
             strokeDashoffset={circumference * (1 - pct)}
             className="transition-all duration-1000"
