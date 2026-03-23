@@ -30,6 +30,8 @@ model Exercise {
 
   setLogs SetLog[]
   records PersonalRecord[]
+
+  @@unique([workoutDayId, orderIndex])
 }
 
 model Session {

@@ -9,9 +9,10 @@ type Props = {
   repsMax: number;
   onLog: (weight: number, reps: number) => Promise<{ isPR: boolean }>;
   isLogged: boolean;
+  onDelete?: () => void;
 };
 
-export function SetInputRow({ setNumber, defaultWeight, repsMin, repsMax, onLog, isLogged }: Props) {
+export function SetInputRow({ setNumber, defaultWeight, repsMin, repsMax, onLog, isLogged, onDelete }: Props) {
   const [weight, setWeight] = useState(defaultWeight);
   const [reps, setReps] = useState(repsMax);
   const [loading, setLoading] = useState(false);
@@ -97,15 +98,27 @@ export function SetInputRow({ setNumber, defaultWeight, repsMin, repsMax, onLog,
         </div>
       </td>
 
-      {/* Log */}
+      {/* Log / Delete */}
       <td className="py-2 pl-2 text-right">
-        <button
-          onClick={handleLog}
-          disabled={loading}
-          className="h-9 rounded-xl bg-blue-600 px-4 text-sm font-bold text-white active:bg-blue-700 disabled:opacity-50"
-        >
-          {loading ? "…" : "Log"}
-        </button>
+        <div className="flex items-center justify-end gap-1.5">
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="flex h-9 w-9 items-center justify-center rounded-lg text-base"
+              style={{ background: "rgba(239,77,123,0.1)", border: "1px solid rgba(239,77,123,0.2)", color: "var(--i)" }}
+            >
+              ×
+            </button>
+          )}
+          <button
+            onClick={handleLog}
+            disabled={loading}
+            className="h-9 rounded-xl px-4 text-sm font-bold disabled:opacity-50"
+            style={{ background: "rgba(108,188,130,0.15)", border: "1px solid rgba(108,188,130,0.25)", color: "var(--e2)" }}
+          >
+            {loading ? "…" : "Log"}
+          </button>
+        </div>
       </td>
     </tr>
   );

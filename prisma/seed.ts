@@ -33,20 +33,11 @@ export async function main() {
 
   for (const group of exerciseGroups) {
     for (const ex of group.exercises) {
-      const existing = await prisma.exercise.findFirst({
-        where: { workoutDayId: group.dayId, orderIndex: ex.orderIndex },
+      await prisma.exercise.upsert({
+        where: { workoutDayId_orderIndex: { workoutDayId: group.dayId, orderIndex: ex.orderIndex } },
+        update: { ...ex },
+        create: { ...ex, workoutDayId: group.dayId },
       });
-
-      if (existing) {
-        await prisma.exercise.update({
-          where: { id: existing.id },
-          data: { ...ex, workoutDayId: group.dayId },
-        });
-      } else {
-        await prisma.exercise.create({
-          data: { ...ex, workoutDayId: group.dayId },
-        });
-      }
     }
   }
 

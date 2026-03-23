@@ -1,4 +1,10 @@
-.PHONY: dev build seed migrate studio reset k8s-pvc deploy
+.PHONY: dev build seed migrate studio reset init k8s-pvc deploy
+
+init:
+	npm install
+	npx prisma generate
+	npx prisma migrate deploy
+	npx prisma db seed
 
 dev: dev.db
 	@pkill -f "next dev" 2>/dev/null || true
@@ -6,7 +12,8 @@ dev: dev.db
 	npm run dev
 
 dev.db:
-	npx prisma migrate dev --name init
+	npx prisma generate
+	npx prisma migrate deploy
 	npx prisma db seed
 
 build:
@@ -16,14 +23,15 @@ seed:
 	npx prisma db seed
 
 migrate:
-	npx prisma migrate dev
+	npx prisma migrate deploy
 
 studio:
 	npx prisma studio
 
 reset:
 	rm -f dev.db
-	npx prisma migrate dev --name init
+	npx prisma generate
+	npx prisma migrate deploy
 	npx prisma db seed
 
 k8s-pvc:

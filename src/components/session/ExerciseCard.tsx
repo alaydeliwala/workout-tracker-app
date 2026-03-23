@@ -123,6 +123,7 @@ export function ExerciseCard({ exercise, sessionId, nextExerciseName }: Props) {
               repsMax={exercise.repsMax}
               onLog={handleLog}
               isLogged={i < completedSets}
+              onDelete={i >= exercise.sets && i >= completedSets ? () => setExtraSets((n) => n - 1) : undefined}
             />
           ))}
         </tbody>

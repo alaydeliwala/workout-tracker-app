@@ -14,7 +14,8 @@
       "Bash(kill -9 64205)",
       "Bash(make dev:*)",
       "Bash(pkill -f \"next dev\")",
-      "Bash(grep -E \"\\\\.\\(tsx?|json\\)$\")"
+      "Bash(grep -E \"\\\\.\\(tsx?|json\\)$\")",
+      "Bash(make reset:*)"
     ]
   }
 }
